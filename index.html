@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para Minha Luísa ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hot-pink: #ff2d55;
+            --cute-pink: #ffafcc;
+            --soft-blue: #a2d2ff;
+            --text-dark: #4a1d2e;
+            --glass: rgba(255, 255, 255, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            height: 100vh; width: 100vw;
+            background: linear-gradient(135deg, var(--soft-blue) 0%, var(--cute-pink) 100%);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            color: var(--text-dark);
+        }
+
+        #particles-js { position: fixed; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+        .container { position: relative; z-index: 10; width: 92%; max-width: 400px; height: 88vh; }
+
+        .card {
+            position: absolute; width: 100%; height: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 40px;
+            border: 3px solid #fff;
+            padding: 35px 25px;
+            display: none; flex-direction: column; align-items: center; text-align: center;
+            box-shadow: 0 15px 35px rgba(255, 175, 204, 0.4);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translateY(20px) scale(0.9);
+            opacity: 0;
+        }
+
+        .card::before, .card::after {
+            content: ''; position: absolute; width: 40px; height: 40px;
+            border: 4px solid var(--cute-pink); border-radius: 50%; opacity: 0.5;
+        }
+        .card::before { top: -10px; left: -10px; border-right-color: transparent; border-bottom-color: transparent; }
+        .card::after { bottom: -10px; right: -10px; border-left-color: transparent; border-top-color: transparent; }
+
+        .active { display: flex !important; transform: translateY(0) scale(1); opacity: 1; }
+
+        .big-title { 
+            font-family: 'Dancing Script', cursive; 
+            font-size: 3.5rem; 
+            color: var(--hot-pink); 
+            text-shadow: 2px 2px 4px rgba(255, 45, 85, 0.15);
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        
+        .text-box {
+            flex-grow: 1; overflow-y: auto; text-align: left; 
+            padding: 20px; margin: 10px 0;
+            font-size: 1rem; line-height: 1.7;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.6);
+            color: #333;
+            scrollbar-width: none;
+        }
+        .text-box::-webkit-scrollbar { display: none; }
+
+        .carousel {
+            width: 100%; height: 380px; position: relative;
+            border-radius: 30px; overflow: hidden;
+            border: 4px solid #fff; background: #fff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            display: flex; justify-content: center; align-items: center;
+        }
+        
+        .slide {
+            position: absolute; width: 100%; height: 100%; opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .slide.active { opacity: 1; z-index: 2; }
+        .slide img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+        .caption {
+            position: absolute; bottom: 15px; 
+            background: rgba(255,255,255,0.8); color: var(--hot-pink);
+            padding: 6px 18px; border-radius: 50px;
+            font-family: 'Dancing Script', cursive; font-size: 1.4rem;
+        }
+
+        .timer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 100%; }
+        .timer-box { 
+            background: #fff; 
+            padding: 15px 5px; border-radius: 20px;
+            border: 1px solid var(--cute-pink);
+            box-shadow: 0 4px 10px rgba(255, 175, 204, 0.2);
+        }
+        .timer-box b { display: block; font-size: 1.3rem; color: var(--hot-pink); }
+        .timer-box span { font-size: 0.65rem; text-transform: uppercase; font-weight: 600; color: var(--text-dark); opacity: 0.8; }
+
+        .btn {
+            width: 100%; padding: 20px; 
+            background: var(--hot-pink);
+            border: none; border-radius: 50px;
+            color: white; font-size: 1.1rem; font-weight: 700;
+            cursor: pointer; box-shadow: 0 10px 25px rgba(255, 45, 85, 0.4);
+            transition: 0.3s;
+        }
+        .btn:active { transform: scale(0.96); box-shadow: 0 5px 15px rgba(255, 45, 85, 0.4); }
+
+        .heartbeat { animation: heartbeat-animation 1.5s infinite; }
+        @keyframes heartbeat-animation {
+            0% { transform: scale(1); }
+            10% { transform: scale(1.06); }
+            20% { transform: scale(1); }
+            30% { transform: scale(1.06); }
+            40% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+
+        #music-box { position: absolute; left: -9999px; }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+    <div id="music-box"><div id="player"></div></div>
+
+    <div class="container">
+        <div id="s1" class="card active" style="justify-content: center;">
+            <div style="font-size: 70px; margin-bottom: 20px; filter: drop-shadow(0 4px 8px rgba(255,77,109,0.3));">🎀</div>
+            <h1 class="big-title">Para Luísa</h1>
+            <p style="font-size: 1rem; opacity: 0.9; margin-bottom: 35px;">Fiz uma coisinha especial pra voce meu amor</p>
+            <button class="btn heartbeat" onclick="startApp()">Abre meu coração ❤️</button>
+        </div>
+
+        <div id="s2" class="card">
+            <h1 class="big-title" style="font-size: 2.8rem;">Minha Luísa...</h1>
+            <div class="text-box">
+                <p>Minha Luisinha linda, leia com calma esse textinho que escrevi onde tento expressar o tamanho do amor que tenho por você mesmo sabendo que não existem palavras que consigam expressar isso por completo.<br><br>
+                Alguns homens podem te escrever textos e cartas extremamente técnicas e bem estruturadas, com todas as pontuações nos lugares corretos e com palavras extremamente eruditas e lindas, porém garanto que por trás desse amontoado de palavras não existe nem metade do sentimento que eu tenho por você, saiba que cada palavra que coloquei aqui foi pensada com calma e que o meu amor por trás delas é genuíno e maior do que parece.<br><br>
+                O que eu sinto por você eu nunca senti por nenhuma outra mulher, posso te afirmar com toda certeza que elas não chegaram nem perto Luísa. Você é especial pra mim, não quero e não vou te esquecer.<br><br>
+                Te amei desde a nossa primeira conversa que logo se tornou a nossa primeira madrugada juntos. Não imaginava que a atitude de te mandar um "oi" que eu tive se tornaria a primeira de muitas e muitas mensagens, penso como eu seria se tivesse escolhido outra pessoa pra mandar mensagem ao invés de você, o fato de que eu poderia ter escolhido uma qualquer me assusta, mas entre todas eu ter escolhido você, me fez perder um pouco do ceticismo em relação as coincidências da vida e me fez acreditar que talvez até possa existir algum tipo de ordenamento cósmico por trás de tudo isso, mas não tenho certeza de nada, a única certeza que eu tenho é que agora eu te amo e continuarei te amando muito amanhã.<br><br>
+                Outra coisa que queria compartilhar é que desde mais novo sempre tive um ideal de mulher na minha cabeça como já te falei, porém ele sempre foi deixado de lado por já imaginar que nunca encontraria uma mulher assim e nunca tive esperança de encontrar pra ser sincero. Então me contentaria com uma que minimamente fosse parecida comigo.<br><br>
+                Mas aí encontrei, você meu amor. Tudo o que eu queria e o que eu precisava. Ainda bem que você apareceu.<br><br>
+                Você significa muito pra mim Luísa.<br><br>
+                Acredito que, mesmo com o tempo passando e cada um seguindo seu rumo, o destino poderia nos unir de novo. E qualquer mínimo contato com você, não importa quando, me faria me apaixonar outra vez, como na primeira. Existe muito tempo ainda pela frente.<br><br>
+                Mas eu não só te amo, eu te admiro muito, principalmente por ter passado por tudo que você passou e ainda assim não perder todas essas características lindas que compõe sua personalidade e que foram com certeza um dos vários motivos que fizeram eu me atrair por você.<br><br>
+                Saber que consigo fazer você se abrir pra mim e ser cada vez mais você mesma me deixa genuinamente feliz. Sempre quis fazer isso por alguém que eu amo, tentar deixar a vida dessa pessoa mais leve fazendo com que ela não precise se preocupar o tempo todo em estar perfeita. Talvez porque eu sempre quis que fizessem isso comigo, porém, me sinto mais feliz saber que posso fazer isso pra você meu amor, saber que consigo fazer você se sentir segura me dá um calor no peito e saber que posso ajudar as pessoas que amo me faz sentir útil. Cada vez mais acredito que a vida são os outros.<br><br>
+                Queria terminar dizendo que te acho a mulher mais linda do mundo em todos os momentos, arrumada ou desarrumada, maquiada ou sem maquiagem, tristinha ou feliz, em um ângulo bom ou ruim, pra mim você continua sendo extremamente linda de todos os deitos. E está tudo bem você se cobrar tanto em relação a isso, eu entendo perfeitamente e isso é normal com todas as mulheres bonitas, mas saiba que no fim do dia ao falar comigo você não precisa se preocupar tanto com isso, só se quiser, mas quero te garantir que pra mim você é linda de todos os deitos.<br><br>
+                Tudo que disse aqui foi pensado e pensando em você. Beijos. Te amo muito Luísa.<br><br>
+                <strong style="color:var(--hot-pink)">Caetano.</strong></p>
+            </div>
+            <button class="btn" onclick="nav(3)">Próxima ✨</button>
+        </div>
+
+        <div id="s3" class="card">
+            <h1 class="big-title" style="font-size: 2.5rem;">SUAS FOTOS LINDAS</h1>
+            <div class="carousel" onclick="nextP()">
+                <div class="slide active"><img src="foto1.jpg"><div class="caption">MINHA LINDA ❤️</div></div>
+                <div class="slide"><img src="foto2.jpg"><div class="caption">MINHA PRINCESINHA ✨</div></div>
+                <div class="slide"><img src="foto3.jpg"><div class="caption">MINHA GATINHA 🌹</div></div>
+                <div class="slide"><img src="foto4.jpg"><div class="caption">MINHA PARDINHA</div></div>
+                <div class="slide"><img src="foto5.jpg"><div class="caption">MINHA BONEQUINHA</div></div>
+                <div class="slide"><img src="foto6.jpg"><div class="caption">MINHA FOFINHA</div></div>
+            </div>
+            <p style="margin-top: 15px; opacity: 0.7; font-size: 0.8rem;">Clica na imagem para passar</p>
+            <button class="btn" style="margin-top: 15px;" onclick="nav(4)">Continuar ❤️</button>
+        </div>
+
+        <div id="s4" class="card" style="justify-content: center;">
+            <h1 class="big-title" style="font-size: 2.8rem; margin-bottom: 20px;">Te conheci a:</h1>
+            <div class="timer-grid">
+                <div class="timer-box"><b id="d">0</b><span>Dias</span></div>
+                <div class="timer-box"><b id="h">0</b><span>Horas</span></div>
+                <div class="timer-box"><b id="m">0</b><span>Minutos</span></div>
+                <div class="timer-box"><b id="s">0</b><span>Segundos</span></div>
+            </div>
+            <h1 class="big-title" style="margin-top: 30px; font-size: 3.5rem;">Te amo Muito!</h1>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        let player;
+        let playerReady = false;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0', width: '0', videoId: 'jKIK__j1Nno',
+                playerVars: { 
+                    'autoplay': 0, 
+                    'controls': 0, 
+                    'rel': 0,
+                    'playsinline': 1 
+                },
+                events: {
+                    'onReady': () => { playerReady = true; }
+                }
+            });
+        }
+
+        function startApp() {
+            if (player && playerReady) {
+                player.setVolume(100);
+                player.playVideo();
+                
+                // Backup agressivo caso o autoplay inicial falhe
+                setTimeout(() => {
+                    if (player.getPlayerState() !== 1) {
+                        player.playVideo();
+                    }
+                }, 300);
+            }
+            nav(2);
+        }
+
+        function nav(n) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            document.getElementById('s' + n).classList.add('active');
+        }
+
+        function nextP() {
+            let slides = document.querySelectorAll('.slide');
+            let curr = 0;
+            slides.forEach((s, i) => { if(s.classList.contains('active')) curr = i; });
+            slides[curr].classList.remove('active');
+            slides[(curr + 1) % slides.length].classList.add('active');
+        }
+
+        const dataI = new Date(2026, 1, 25, 0, 0, 0); 
+        setInterval(() => {
+            const diff = new Date() - dataI;
+            document.getElementById('d').innerText = Math.floor(diff / 86400000);
+            document.getElementById('h').innerText = Math.floor((diff / 3600000) % 24);
+            document.getElementById('m').innerText = Math.floor((diff / 60000) % 60);
+            document.getElementById('s').innerText = Math.floor((diff / 1000) % 60);
+        }, 1000);
+
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 35 },
+                "shape": { "type": "heart" },
+                "color": { "value": ["#ff2d55", "#ffafcc", "#ffffff"] },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 4, "random": true },
+                "move": { "enable": true, "speed": 1.2, "direction": "top", "random_move": true }
+            }
+        });
+    </script>
+</body>
+</html>
